@@ -14,8 +14,7 @@ data['SMA_20'] = data['Adj Close'].rolling(window=20).mean()
 data['SMA_50'] = data['Adj Close'].rolling(window=50).mean()
 
 # 定义买入和卖出信号
-data['Signal'] = 0
-data['Signal'][20:] = np.where(data['SMA_20'][20:] > data['SMA_50'][20:], 1, 0)
+data.loc[20:, 'Signal'] = np.where(data['SMA_20'][20:] > data['SMA_50'][20:], 1, 0)
 
 # 计算策略的持仓
 data['Position'] = data['Signal'].diff()

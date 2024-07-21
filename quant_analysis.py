@@ -14,7 +14,8 @@ data['SMA_20'] = data['Adj Close'].rolling(window=20).mean()
 data['SMA_50'] = data['Adj Close'].rolling(window=50).mean()
 
 # 定义买入和卖出信号
-data.loc[20:, 'Signal'] = np.where(data['SMA_20'][20:] > data['SMA_50'][20:], 1, 0)
+data['Signal'] = 0
+data.iloc[20:, data.columns.get_loc('Signal')] = np.where(data['SMA_20'][20:] > data['SMA_50'][20:], 1, 0)
 
 # 计算策略的持仓
 data['Position'] = data['Signal'].diff()
@@ -35,11 +36,11 @@ plt.plot(data['Adj Close'], label='Adj Close')
 plt.plot(data['SMA_20'], label='20-Day SMA')
 plt.plot(data['SMA_50'], label='50-Day SMA')
 plt.legend()
-plt.show()
+plt.savefig('price_sma.png')  # 保存图表
 
 # 绘制累计收益
 plt.figure(figsize=(14, 7))
 plt.plot(data['Cumulative_Return'], label='Market Return')
 plt.plot(data['Cumulative_Strategy_Return'], label='Strategy Return')
 plt.legend()
-plt.show()
+plt.savefig('cumulative_return.png')  # 保存图表
